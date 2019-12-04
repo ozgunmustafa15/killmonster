@@ -1,2 +1,2 @@
 # killmonster
-Bu oyunda bir canavarı karşınıza alıyor ve savaşıyorsunuz. Siz saldırı yaptıktan sonra canavar da size saldırıyor. Progressbarlar ile tarafların canları anlık olarak izlenmektedir. Can %50 nin altına düştüğünde progressabrımız kırmızıya dönüyor.
+Bu oyunda bir canavarı karşınıza alıyor ve savaşıyorsunuz. Siz saldırı yaptıktan sonra canavar da size saldırıyor.Özel saldırı ile hasarınız daha fazla oluyor(Şimdilik bunun bi maliyeti yok).Sıra sizdeyken iyileştir butonuyla sağlığınızı artırabilirsiniz ancak bu sırada hamle yapamazsınız. Progressbarlar ile tarafların canları anlık olarak izlenmektedir. Can %50 nin altına düştüğünde progressabrımız kırmızıya dönüyor.Tarafların yaptığı hamleleri kayıtlardan takip edebilirsiniz.
