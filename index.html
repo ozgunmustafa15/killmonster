@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <title>Canavar Avı</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="css/foundation.min.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div id="app">
+    <section class="row">
+        <div class="small-6 columns">
+            <h1 class="text-center text-warning"><b>Sen</b></h1>
+            <div class="progress">
+                <div class="progress-bar" :class="{'bg-danger':meHealth<50,'bg-success':meHealth>=50}" role="progressbar" :style="{width:meHealth+'%'}" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="text-center"> {{meHealth}}</div>
+
+        </div>
+        <div class="small-6 columns">
+            <h1 class="text-center text-info"><b>Canavar</b></h1>
+            <div class="progress">
+                <div class="progress-bar" :class="{'bg-danger':monsterHealth<50,'bg-success':monsterHealth>=50}" role="progressbar" :style="{width:monsterHealth+'%'}" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="text-center"> {{monsterHealth}}</div>
+        </div>
+
+    </section>
+    <section class="row controls">
+        <div class="small-12 columns">
+            <button id="start-game">YENİ OYUN</button>
+        </div>
+    </section>
+    <section class="row controls">
+        <div class="small-12 columns">
+            <button id="attack" :disabled="btnDisable" @click="attack">SALDIRI</button>
+            <button id="special-attack" :disabled="btnDisable" @click="specialAttack">ÖZEL SALDIRI</button>
+            <button id="heal" :disabled="meHealth>=100" @click="heal">İLK YARDIM</button>
+            <button id="give-up" @click="consider">PES ET!</button>
+        </div>
+    </section>
+    <section class="row log">
+        <div class="small-12 columns">
+            <ul>
+                <li v-for="log in logs">
+                 <b> {{log.turn}} </b>  : {{log.text}}
+                </li>
+            </ul>
+        </div>
+    </section>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            meHealth:100,
+            monsterHealth:100,
+            btnDisable:false,
+            logs:[]
+            
+        },
+        methods:{
+            specialAttack:function () {
+                var rnd=Math.ceil(Math.random() * 25)
+                this.btnDisable=!this.btnDisable;
+                this.monsterHealth-=rnd;
+                this.add_to_log({turn:"p", text:"Extra Hasar ("+rnd+")"});
+            },
+            attack:function () {
+                var rnd=Math.ceil(Math.random() * 10)
+                this.btnDisable=!this.btnDisable;
+                this.monsterHealth-=rnd;
+                this.add_to_log({turn:"p", text:"Hasar ("+rnd+")"});
+
+
+            },
+            monsterAttack:function () {
+                var rnd=Math.ceil(Math.random() * 35)
+                this.btnDisable=!this.btnDisable;
+                this.meHealth-=rnd;
+                this.add_to_log({turn:"m", text:"Canavar Hasarı ("+rnd+")"});
+
+            },
+            heal:function () {
+                var rnd=Math.ceil(Math.random() * 35)
+                this.btnDisable=!this.btnDisable;
+                this.meHealth+=rnd;
+                this.add_to_log({turn:"p", text:"Sağlık ("+rnd+")"});
+                this.monsterAttack();
+
+            },
+            consider:function () {
+                this.meHealth=0;
+                this.add_to_log({turn:"p", text:"Pes edildi"});
+
+
+            },
+            add_to_log:function (log) {
+                this.logs.push(log);
+                
+            }
+        },
+        watch:{
+            monsterHealth:function (value) {
+                if (this.monsterHealth!=0) {
+                    vm=this;
+                    setTimeout(function () {
+                        vm.monsterAttack();
+                    },1500)
+                    if (value<0){
+                        this.monsterHealth=0;
+                        confirm("kazandın");
+
+
+                    }
+                    else if (value>100)
+                        return this.monsterHealth=100;
+                }
+
+                
+            },
+            meHealth:function (value) {
+                if (value<=0){
+                    this.meHealth=0;
+                    confirm("kaybettin");
+
+                }
+            }
+        }
+    })
+</script>
+
+</body>
+</html>
